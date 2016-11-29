@@ -21,13 +21,13 @@ make
 
 For FreeBSD , use gmake instead of make.
 
-## Test
+## Test MySQL
 
 Run these in different consoles:
 
 ```
-./skynet examples/config	# Launch first skynet node  (Gate server) and a skynet-master (see config for standalone option)
-./3rd/lua/lua examples/client.lua 	# Launch a client, and try to input hello.
+./skynet examples/sgateconfig	# Launch first skynet node  (Gate server) and a skynet-master (see config for standalone option)
+./3rd/lua/lua examples/sclient.lua 	# Launch a client, and try to input hello.
 ```
 
 ## About Lua version
