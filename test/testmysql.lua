@@ -77,8 +77,8 @@ skynet.start(function()
 		host="127.0.0.1",
 		port=3306,
 		database="skynet",
-		user="root",
-		password="1",
+		user="interface",
+		password="627795061",
 		max_packet_size = 1024 * 1024,
 		on_connect = on_connect
 	})
@@ -90,14 +90,23 @@ skynet.start(function()
 	local res = db:query("drop table if exists cats")
 	res = db:query("create table cats "
 		               .."(id serial primary key, ".. "name varchar(5))")
-	print( dump( res ) )
+	--print( dump( res ) )
 
 	res = db:query("insert into cats (name) "
                              .. "values (\'Bob\'),(\'\'),(null)")
-	print ( dump( res ) )
+	--print ( dump( res ) )
 
 	res = db:query("select * from cats order by id asc")
-	print ( dump( res ) )
+	--print (dump(res))
+	for k,v in pairs(res) do
+		--print(k,v)
+		if(type(v)=='table') then
+			for k1,v1 in pairs(v) do
+				print(k1,v1)
+			end
+		end
+	end
+	--[===[print ( dump( res ) )
 
     -- test in another coroutine
 	skynet.fork( test2, db)
@@ -124,6 +133,7 @@ skynet.start(function()
         skynet.sleep(1000)
         i=i+1
     end
+	--]===]
 
 	--db:disconnect()
 	--skynet.exit()

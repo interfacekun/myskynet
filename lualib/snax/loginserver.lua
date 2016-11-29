@@ -55,19 +55,23 @@ local function launch_slave(auth_handler)
 
 		local challenge = crypt.randomkey()
 		write("auth", fd, crypt.base64encode(challenge).."\n")
+		print("s--->c 1",crypt.base64encode(challenge))
 
 		local handshake = assert_socket("auth", socket.readline(fd), fd)
+		print("c--->s 1",crypt.base64decode(handshake))
 		local clientkey = crypt.base64decode(handshake)
 		if #clientkey ~= 8 then
 			error "Invalid client key"
 		end
 		local serverkey = crypt.randomkey()
-		write("auth", fd, crypt.base64encode(crypt.dhexchange(serverkey)).."\n")
+		write("auth", fd, crypt.base64encode(crypt.dhexchange(serverkey)).."\n")	
+		print("s--->c 2", crypt.base64encode(crypt.dhexchange(serverkey)))
 
 		local secret = crypt.dhsecret(clientkey, serverkey)
 
 		local response = assert_socket("auth", socket.readline(fd), fd)
 		local hmac = crypt.hmac64(challenge, secret)
+		print("c--->s 2", hmac)
 
 		if hmac ~= crypt.base64decode(response) then
 			write("auth", fd, "400 Bad Request\n")

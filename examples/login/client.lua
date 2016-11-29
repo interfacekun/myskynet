@@ -45,6 +45,7 @@ local function unpack_f(f)
 			local result
 			result, last = try_recv(fd, last)
 			if result then
+				print(result)
 				return result
 			end
 			socket.usleep(100)
@@ -55,15 +56,18 @@ end
 local readline = unpack_f(unpack_line)
 
 local challenge = crypt.base64decode(readline())
+print("s--->c 1", challenge)
 
 local clientkey = crypt.randomkey()
 writeline(fd, crypt.base64encode(crypt.dhexchange(clientkey)))
+print("c--->s 1", crypt.base64encode(crypt.dhexchange(clientkey)))
 local secret = crypt.dhsecret(crypt.base64decode(readline()), clientkey)
-
+print("s--->c 2", secret)
 print("sceret is ", crypt.hexencode(secret))
 
 local hmac = crypt.hmac64(challenge, secret)
 writeline(fd, crypt.base64encode(hmac))
+print("c--->s 2", hmac)
 
 local token = {
 	server = "sample",
@@ -81,9 +85,10 @@ end
 local etoken = crypt.desencode(secret, encode_token(token))
 local b = crypt.base64encode(etoken)
 writeline(fd, crypt.base64encode(etoken))
+print("c--->s 3", crypt.base64encode(etoken))
 
 local result = readline()
-print(result)
+print("s---c>3", result)
 local code = tonumber(string.sub(result, 1, 3))
 assert(code == 200)
 socket.close(fd)

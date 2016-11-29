@@ -30,7 +30,28 @@ set 3 {
 	}
 }
 
-quit 4 {}
+quit 4 {
+}
+
+driver 5 {
+    request {
+        what 0 : string
+    }
+    response {
+        result 0 : string
+    }
+}
+
+login 6 {
+	request {
+		username 0 : string
+		password 1 : string
+	}
+	response {
+		result 0 : string
+		error  1 : integer
+	}
+}
 
 ]]
 
@@ -41,6 +62,13 @@ proto.s2c = sprotoparser.parse [[
 }
 
 heartbeat 1 {}
+
+test 2 {
+	request {
+		gaiyixia 0 : string
+	}
+}
+
 ]]
 
 return proto

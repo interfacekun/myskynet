@@ -24,14 +24,27 @@ function REQUEST:set()
 end
 
 function REQUEST:handshake()
-	return { msg = "Welcome to skynet, I will send heartbeat every 5 sec." }
+	return { msg = "Welcome to skynet, I will send heartbeat" }
 end
 
 function REQUEST:quit()
 	skynet.call(WATCHDOG, "lua", "close", client_fd)
 end
 
+function REQUEST:driver()
+	if(self.what == "老司机") then
+		return { result="来不及解释了，快上车！" }
+	elseif(self.what == "覃增宇") then
+		return { result="滴，学生卡！" }
+	elseif(self.what == "张德信") then
+		return { result="没位置了！" }
+	else
+		return { result="请输入指令:" }
+	end
+end
+
 local function request(name, args, response)
+	--print("request_name:" .. name)
 	local f = assert(REQUEST[name])
 	local r = f(args)
 	if response then
@@ -75,10 +88,12 @@ function CMD.start(conf)
 	host = sprotoloader.load(1):host "package"
 	send_request = host:attach(sprotoloader.load(2))
 	skynet.fork(function()
-		while true do
-			send_package(send_request "heartbeat")
-			skynet.sleep(500)
-		end
+			while true do
+				send_package(send_request "heartbeat")
+				send_package(send_request("test", { gaiyixia="test" }))
+				skynet.sleep(500)
+			end
+			
 	end)
 
 	client_fd = fd

@@ -54,7 +54,7 @@ local function send_request(name, args)
 	session = session + 1
 	local str = request(name, args, session)
 	send_package(fd, str)
-	print("Request:", session)
+	--print("Request:", session)
 end
 
 local last = ""
@@ -69,7 +69,7 @@ local function print_request(name, args)
 end
 
 local function print_response(session, args)
-	print("RESPONSE", session)
+	--print("RESPONSE", session)
 	if args then
 		for k,v in pairs(args) do
 			print(k,v)
@@ -99,7 +99,8 @@ local function dispatch_package()
 end
 
 send_request("handshake")
-send_request("set", { what = "hello", value = "world" })
+--send_request("set", { what = "hello", value = "world" })
+--send_request("driver")
 while true do
 	dispatch_package()
 	local cmd = socket.readstdin()
@@ -107,7 +108,7 @@ while true do
 		if cmd == "quit" then
 			send_request("quit")
 		else
-			send_request("get", { what = cmd })
+			send_request("driver", { what = cmd })
 		end
 	else
 		socket.usleep(100)

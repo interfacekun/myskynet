@@ -14,11 +14,14 @@ skynet.register_protocol {
 local handler = {}
 
 function handler.open(source, conf)
+	print("source", source)
+	print("conf.watchdog", conf.watchdog)
 	watchdog = conf.watchdog or source
 end
 
 function handler.message(fd, msg, sz)
 	-- recv a package, forward it
+	print("receive a msg!")
 	local c = connection[fd]
 	local agent = c.agent
 	if agent then
@@ -70,6 +73,7 @@ end
 local CMD = {}
 
 function CMD.forward(source, fd, client, address)
+	print("forward a msg")
 	local c = assert(connection[fd])
 	unforward(c)
 	c.client = client or 0

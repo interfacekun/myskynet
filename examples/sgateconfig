@@ -1,0 +1,16 @@
+root = "./"
+thread = 8
+logger = nil --不启用日志
+logpath = "."
+harbor = 0 --单节点不需要
+--address = "ip:port" --单节点不需要
+--master = "ip:port"  --单节点不需要
+bootstrap = "snlua bootstrap" --skynet节点起动脚本
+--standalone= "ip:port" --单节点不不需要开启控制中心
+luaservice = root.."service/?.lua;"..root.."test/?.lua;"..root.."examples/?.lua" --luaservice脚本路径
+lualoader = root .. "lualib/loader.lua" --lua脚本加载路径
+snax = root.."examples/?.lua;"..root.."test/?.lua" --snax 是一个方便 skynet 服务实现的简单框架,设置它查找lua脚本的路径
+lua_path = root.."lualib/?.lua;"..root.."lualib/?/init.lua"
+cpath = root.."cservice/?.so" --c动态链接库路径
+
+start = "sgatemain" --自定义节点起动的服务
